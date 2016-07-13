@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+http://www.springframework.org/schema/beans/spring-beans.xsd">  
+	<bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+		<property name="service" ref="crudImplementation" />
+		<property name="serviceInterface" value="desktopadmin.action.Crud" />
+		
+		<property name="serviceName" value="CrudServiceName" />
+		<property name="replaceExistingBinding" value="true"></property>  
+		<property name="registryPort" value="25487" />
+	</bean>
+
+<bean id="crudImplementation" class="desktopadmin.action.CrudImplementation"></bean>
+</beans>
