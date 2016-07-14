@@ -33,8 +33,7 @@ public class Project extends BaseEntity
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project", cascade = CascadeType.ALL)
 	private Set<Transaction> transactions;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "address_id")
+	 @OneToOne(mappedBy = "project",cascade=CascadeType.ALL)
 	private Address address;
 
 	@Column(name = "flat_price_by_meter")

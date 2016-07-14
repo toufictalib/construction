@@ -71,7 +71,6 @@ dbStarter.init();
 		
 		Project project = new Project();
 		project.setName("Al Shams");
-		project.setAddress(address);
 		
 		block.setProject(project);
 		block1.setProject(project);

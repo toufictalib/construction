@@ -1,12 +1,20 @@
 package desktopadmin.action;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +25,7 @@ import desktopadmin.action.bean.ContractBean;
 import desktopadmin.action.bean.Entry;
 import desktopadmin.model.building.Block;
 import desktopadmin.model.building.Project;
+import desktopadmin.model.general.BaseEntity;
 import desktopadmin.model.person.Company;
 import desktopadmin.model.person.Customer;
 import desktopadmin.model.person.Supplier;
@@ -42,14 +51,66 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 		return commonDao.list(clazz);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> void saveOrUpdate(Collection<T> data)throws RemoteException
 	{
+		if(data.isEmpty())
+		{
+			return;
+		}
+		
+		//get Clazz
+		Class<T> clazz = getClazz(data);
+		
+		
 		for (T t : data)
 		{
 			commonDao.saveOrUpdate(t);
 		}
+		
+		
+		Set<T> incommingValues  = new HashSet<>(data);
+		
+		for(T t:list(clazz))
+		{
+			if(incommingValues.contains(t))
+				continue;
+			
+			T instance;
+			try
+			{
+				BaseEntity baseEntity = (BaseEntity) t;
+				instance = clazz.newInstance();
+				Method findDeclaredMethod = BeanUtils.findDeclaredMethod(clazz, "setId", Long.class);
+				findDeclaredMethod.invoke(instance, baseEntity.getId());
+				
+				
+				commonDao.getSession().evict(t);
+				commonDao.delete(instance);
+			}
+			catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+			{
+				throw new RemoteException(e.getMessage());
+				
+			}
+			
+		}
+		
+		
 
+	}
+
+	private <T> Class<T> getClazz(Collection<T> data)
+	{
+		Iterator<T> iterator = data.iterator();
+		Class<T> clazz = null;
+		while(iterator.hasNext())
+		{
+			clazz = (Class<T>) iterator.next().getClass();
+			break;
+		}
+		return clazz;
 	}
 
 	@Override

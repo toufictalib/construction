@@ -1,9 +1,12 @@
 package desktopadmin.model.building;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import desktopadmin.model.general.BaseEntity;
@@ -38,6 +41,9 @@ public class Address extends BaseEntity
 	@Enumerated(EnumType.ORDINAL)
 	private Caza caza;
 
+	@OneToOne(cascade = CascadeType.ALL,orphanRemoval=true)
+	@JoinColumn(name = "project_id")
+	private Project project;
 	
 	public Address( )
 	{
@@ -80,6 +86,17 @@ public class Address extends BaseEntity
 	public void setCaza(Caza caza)
 	{
 		this.caza = caza;
+	}
+
+	
+	public Project getProject( )
+	{
+		return project;
+	}
+
+	public void setProject(Project project)
+	{
+		this.project = project;
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import desktopadmin.model.general.BaseEntity;
 
 @Entity
 @Table(name = "transaction")
-public class Transaction extends BaseEntity
+public abstract class Transaction extends BaseEntity
 {
 
 	/**
