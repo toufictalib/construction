@@ -47,6 +47,20 @@ public class Contract extends BaseEntity
 	@Column(name="date_creation")
 	private Date creationDate;
 
+	
+	
+	public Contract( )
+	{
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Contract(Long id)
+	{
+		super(id);
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getDescription( )
 	{
 		return description;

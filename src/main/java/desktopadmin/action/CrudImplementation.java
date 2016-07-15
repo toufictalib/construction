@@ -5,11 +5,9 @@ import java.lang.reflect.Method;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import desktopadmin.DAO.CommonDao;
 import desktopadmin.action.bean.BlockBean;
 import desktopadmin.action.bean.ContractBean;
+import desktopadmin.action.bean.ContractEntry;
 import desktopadmin.action.bean.Entry;
 import desktopadmin.model.building.Block;
 import desktopadmin.model.building.Project;
@@ -29,6 +28,7 @@ import desktopadmin.model.general.BaseEntity;
 import desktopadmin.model.person.Company;
 import desktopadmin.model.person.Customer;
 import desktopadmin.model.person.Supplier;
+import desktopadmin.model.sold.Contract;
 
 @Service
 @Transactional
@@ -51,7 +51,6 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 		return commonDao.list(clazz);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> void saveOrUpdate(Collection<T> data)throws RemoteException
 	{
@@ -101,6 +100,7 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 
 	}
 
+	@SuppressWarnings("unchecked")
 	private <T> Class<T> getClazz(Collection<T> data)
 	{
 		Iterator<T> iterator = data.iterator();
@@ -146,11 +146,15 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 		}
 		
 		List<Customer> customers = list(Customer.class);
-		List<Entry> customerEntries = customers.stream().map(e->new Entry(e.getId(),e.getName())).collect(Collectors.toList());
+		List<Contract> contracts = commonDao.getCustomerContracts(projectId);
 		
+		List<Entry> customerEntries = customers.stream().map(e->new Entry(e.getId(),e.getName())).collect(Collectors.toList());
+		List<ContractEntry> contractEntries = contracts.stream().map(e->new ContractEntry(e.getId(),e.getDescription(),e.getCustomer().getId())).collect(Collectors.toList());
+
 		ContractBean contractBean = new ContractBean();
 		contractBean.setBlocks(blocksByProject);
 		contractBean.setCustomers(customerEntries);
+		contractBean.setContracts(contractEntries);
 		
 		return contractBean;
 	}

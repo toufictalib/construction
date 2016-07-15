@@ -9,6 +9,11 @@ import desktopadmin.model.sold.Contract;
 
 public class ContractBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private List<Entry> customers;
 	private List<Entry> suppliers;
 	private List<Entry> companies;
@@ -19,6 +24,8 @@ public class ContractBean implements Serializable
 	
 	private List<Transaction> transactions;
 
+	private List<ContractEntry> contracts;
+	
 	public List<Entry> getCustomers( )
 	{
 		return customers;
@@ -79,6 +86,17 @@ public class ContractBean implements Serializable
 	{
 		this.transactions = transactions;
 	}
+
+	public List<ContractEntry> getContracts( )
+	{
+		return contracts;
+	}
+
+	public void setContracts(List<ContractEntry> contracts)
+	{
+		this.contracts = contracts;
+	}
+	
 	
 	
 	
