@@ -7,6 +7,7 @@ import java.util.List;
 
 import desktopadmin.action.bean.BlockBean;
 import desktopadmin.action.bean.ContractBean;
+import desktopadmin.action.bean.ReportTableModel;
 
 public interface Crud extends Remote
 {
@@ -25,4 +26,8 @@ public interface Crud extends Remote
 	void saveContract(ContractBean contractBean) throws RemoteException;
 
 	ContractBean getSupplierContractBean(Long projectId) throws RemoteException;
+
+
+	ReportTableModel getCustomerTransaction(Long customerId, Long contractId)  throws RemoteException;
+	
 }

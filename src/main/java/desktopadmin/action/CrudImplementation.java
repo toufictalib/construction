@@ -22,6 +22,7 @@ import desktopadmin.action.bean.BlockBean;
 import desktopadmin.action.bean.ContractBean;
 import desktopadmin.action.bean.ContractEntry;
 import desktopadmin.action.bean.Entry;
+import desktopadmin.action.bean.ReportTableModel;
 import desktopadmin.model.building.Block;
 import desktopadmin.model.building.Project;
 import desktopadmin.model.general.BaseEntity;
@@ -192,5 +193,19 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 		commonDao.saveMass(contractBean.getTransactions());
 		
 	}
+	
+	@Override
+	public ReportTableModel getCustomerTransaction(Long customerId, Long contractId)
+	{
+		List list = commonDao.getCustomerTransactions(customerId, contractId);
+		
+		
+		System.out.println();
+		
+		ReportTableModel model = ReportTableModel.create(list);
+		
+		return model;
+	}
+
 
 }
