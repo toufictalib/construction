@@ -62,7 +62,7 @@ public class BaseEntity implements Serializable
 	{
 		if (this == obj) return true;
 		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
+		if (getClass() == obj.getClass()) return true;
 		BaseEntity other = (BaseEntity) obj;
 		if (id == null)
 		{
@@ -70,6 +70,7 @@ public class BaseEntity implements Serializable
 		}
 		else
 			if ( !id.equals(other.id)) return false;
+		
 		return true;
 	}
 

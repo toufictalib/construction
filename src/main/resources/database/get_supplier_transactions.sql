@@ -2,9 +2,9 @@ DELIMITER $$
 
 USE `construction`$$
 
-DROP PROCEDURE IF EXISTS `get_customer_transactions`$$
+DROP PROCEDURE IF EXISTS `get_supplier_transactions`$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_customer_transactions`(IN p_customer_id BIGINT,IN p_contract_id BIGINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_supplier_transactions`(IN p_customer_id BIGINT,IN p_project_id BIGINT)
 BEGIN
   
   SELECT 
@@ -28,10 +28,10 @@ FROM
   LEFT JOIN title ti 
     ON ti.`id` = p.`title` 
     LEFT JOIN `transaction_cause` tc ON t.`payment_cause` = tc.id
-WHERE t.`payer` = 1
+WHERE t.`payer` = 0
 AND t.`reference_id` = p_customer_id
   /*Customer*/
-  AND t.`contract` = p_contract_id
+  AND t.project = p_project_id
 	
   ;
     

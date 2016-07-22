@@ -25,6 +25,7 @@ import desktopadmin.action.bean.Entry;
 import desktopadmin.action.bean.ReportTableModel;
 import desktopadmin.model.building.Block;
 import desktopadmin.model.building.Project;
+import desktopadmin.model.building.RealEstate;
 import desktopadmin.model.general.BaseEntity;
 import desktopadmin.model.person.Company;
 import desktopadmin.model.person.Customer;
@@ -205,6 +206,42 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 		ReportTableModel model = ReportTableModel.create(list);
 		
 		return model;
+	}
+	
+	
+	@Override
+	public ReportTableModel getSupplierTransaction(Long supplierId, Long projectId)
+	{
+		List list = commonDao.getSuppliersTransactions(supplierId, projectId);
+		
+		
+		System.out.println();
+		
+		ReportTableModel model = ReportTableModel.create(list);
+		
+		return model;
+	}
+	
+	@Override
+	public List<Contract> getCustomerContracts(Long projectId, Long customerId)
+	{
+		List<Contract> contracts =  commonDao.getCustomerContracts(projectId, customerId);
+		
+		
+		return contracts;
+	}
+	
+	@Override
+	public List<Contract> getCustomerContracts(Long projectId)
+	{
+		List<Contract> contracts= commonDao.getCustomerContracts(projectId);
+		for (Contract contract : contracts)
+		{
+			Hibernate.initialize(contract.getRealEstate());
+			Hibernate.initialize(contract.getRealEstate().getBlock());
+		}
+		return contracts;
+		
 	}
 
 
