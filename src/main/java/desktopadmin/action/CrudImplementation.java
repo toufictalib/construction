@@ -209,13 +209,13 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 	}
 	
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public ReportTableModel getSupplierTransaction(Long supplierId, Long projectId)
 	{
 		List list = commonDao.getSuppliersTransactions(supplierId, projectId);
 		
 		
-		System.out.println();
 		
 		ReportTableModel model = ReportTableModel.create(list);
 		
@@ -242,6 +242,12 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 		}
 		return contracts;
 		
+	}
+	
+	@Override
+	public ReportTableModel getProjectExpensesIncome(Long projectId)
+	{
+		return ReportTableModel.create(commonDao.getProjectExpensesIncome(projectId));
 	}
 
 

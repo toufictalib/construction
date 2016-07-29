@@ -1,7 +1,5 @@
 package desktopadmin.DAO;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,10 +7,7 @@ import java.util.Map;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.internal.SQLQueryImpl;
 import org.hibernate.transform.BasicTransformerAdapter;
-import org.hibernate.transform.ResultTransformer;
-import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 
 import desktopadmin.model.building.Block;
@@ -59,9 +54,6 @@ public class CommonDao extends EmptyDAO
 		
 	}
 	
-	@SuppressWarnings({
-		"unchecked", "unused"
-		})
 		public List<Map<String, Object>> getCustomerTransactions(Long customerId,Long contractId)
 		{
 			
@@ -72,30 +64,11 @@ public class CommonDao extends EmptyDAO
 					.setParameter("p_contract_id", contractId);
 					;
 					
-					query.setResultTransformer(new BasicTransformerAdapter()
-					{
-						@Override
-						public Object transformTuple(Object[] tuple, String[] aliases)
-						{
-							Map<String, Object> map = new LinkedHashMap<>();
-							for(int i=0;i<tuple.length;i++)
-							{
-								map.put(aliases[i], tuple[i]);
-							}
-							
-							return map;
-						}
-					});
-					
-					
-					List<Map<String, Object>> list = query.list();
-			return list;
+					List<Map<String, Object>> list = toReportTableModel(query);
+					return list;
 			
 		}
 	
-	@SuppressWarnings({
-		"unchecked", "unused"
-		})
 		public List<Map<String, Object>> getSuppliersTransactions(Long customerId,Long projectId)
 		{
 			
@@ -105,26 +78,9 @@ public class CommonDao extends EmptyDAO
 					.setParameter("p_customer_id", customerId)
 					.setParameter("p_project_id", projectId);
 					;
-					List result = query.list();
 					
-					query.setResultTransformer(new BasicTransformerAdapter()
-					{
-						@Override
-						public Object transformTuple(Object[] tuple, String[] aliases)
-						{
-							Map<String, Object> map = new LinkedHashMap<>();
-							for(int i=0;i<tuple.length;i++)
-							{
-								map.put(aliases[i], tuple[i]);
-							}
-							
-							return map;
-						}
-					});
-					
-					
-					List<Map<String, Object>> list = query.list();
-			return list;
+					List<Map<String, Object>> list = toReportTableModel(query);
+					return list;
 			
 		}
 	
@@ -144,4 +100,52 @@ public class CommonDao extends EmptyDAO
 				return query.list();
 		
 	}
+	
+		public List<Map<String, Object>> getProjectExpensesIncome(Long projectId)
+		{
+			
+			
+			Query query = getSession().createSQLQuery(
+					"CALL get_project_expenses_incomes (:p_project_id,:p_start_date,:p_end_date,:p_start_count,:p:p_end_count)")
+					.setParameter("p_project_id", projectId)
+					.setParameter("p_start_date", null)
+					.setParameter("p_end_date", null)
+					.setParameter("p_start_count", 0)
+					.setParameter("p:p_end_count", 1000);
+					;
+					
+					List<Map<String, Object>> list = toReportTableModel(query);
+			return list;
+			
+		}
+
+	@SuppressWarnings("unchecked")
+	private List<Map<String, Object>> toReportTableModel(Query query)
+	{
+		query.setResultTransformer(new BasicTransformerAdapter()
+		{
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -710254399413875754L;
+
+			@Override
+			public Object transformTuple(Object[] tuple, String[] aliases)
+			{
+				Map<String, Object> map = new LinkedHashMap<>();
+				for(int i=0;i<tuple.length;i++)
+				{
+					map.put(aliases[i], tuple[i]);
+				}
+				
+				return map;
+			}
+		});
+		
+		
+		List<Map<String, Object>> list = query.list();
+		return list;
+	}
+	
+	
 }

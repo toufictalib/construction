@@ -88,4 +88,9 @@ public class EnumType
 			throw new RuntimeException("No Discriminator has already assigned to "+this);
 		}
 	}
+	
+	public enum ExtraRowType
+	{
+		NONE,SUM,AVERAGE,CURRENCY;
+	}
 }
