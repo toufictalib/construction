@@ -71,7 +71,7 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 		}
 		
 		
-		Set<T> incommingValues  = new HashSet<>(data);
+		/*Set<T> incommingValues  = new HashSet<>(data);
 		
 		for(T t:list(clazz))
 		{
@@ -96,7 +96,7 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 				
 			}
 			
-		}
+		}*/
 		
 		
 
@@ -248,6 +248,12 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 	public ReportTableModel getProjectExpensesIncome(Long projectId)
 	{
 		return ReportTableModel.create(commonDao.getProjectExpensesIncome(projectId));
+	}
+	
+	@Override
+	public ReportTableModel getStock(Long productId,Long supplierId,Long projectId)
+	{
+		return ReportTableModel.create(commonDao.getStock(productId, supplierId,projectId));
 	}
 
 

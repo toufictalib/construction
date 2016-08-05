@@ -24,6 +24,8 @@ public class ReportTableModel implements Serializable
 	public List<List<Object>> rows;
 	
 	public List<List<Object>> extras;
+	
+	private List<Double> values;
 
 	public static ReportTableModel create(List<Map<String, Object>> list)
 	{
@@ -76,6 +78,7 @@ public class ReportTableModel implements Serializable
 	public void addExtrass(List<ExtraRowIndex> indexes)
 	{
 
+		
 		List<ExtraRowType> extraRowTypes = new ArrayList<>();
 		for (int i = 0; i < cols.size(); i++ )
 		{
@@ -95,7 +98,7 @@ public class ReportTableModel implements Serializable
 		if(extraRow.size()!=cols.size())
 			throw new IllegalArgumentException("Extra Rows size should similar to cols size");
 		
-		List<Double> values = new ArrayList<>();
+		 values = new ArrayList<>();
 		for(String s:cols)
 		{
 			values.add(0d);
@@ -124,6 +127,20 @@ public class ReportTableModel implements Serializable
 	public ReportTableModel( )
 	{
 		super();
+	}
+	
+	public Double getValueFromExtraRow(int index)
+	{
+		if(index>=0 && index < cols.size())
+		{
+			return values.get(index);
+		}
+		throw new IllegalArgumentException("getValueFromExtraRow:: index should be >=0 or <=cols size"+cols.size());
+	}
+	
+	public boolean isEmpty()
+	{
+		return rows.isEmpty();
 	}
 
 }

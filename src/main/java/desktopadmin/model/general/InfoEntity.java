@@ -11,6 +11,19 @@ public class InfoEntity extends BaseEntity
 	@Column(name = "name")
 	protected String name;
 
+	
+	public InfoEntity( )
+	{
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public InfoEntity(Long id)
+	{
+		super(id);
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getName( )
 	{
 		return name;

@@ -15,10 +15,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import desktopadmin.model.accounting.EnumType.Payer;
-import desktopadmin.model.accounting.EnumType.PaymentMovement;
+import desktopadmin.model.accounting.EnumType.TransactionType;
 import desktopadmin.model.accounting.payment.Payment;
 import desktopadmin.model.building.Project;
 import desktopadmin.model.general.BaseEntity;
+import desktopadmin.model.stock.Item;
 
 @Entity
 @Table(name = "transaction")
@@ -42,11 +43,15 @@ public abstract class Transaction extends BaseEntity
 
 	@Column(name = "payment_movement", nullable = false)
 	@Enumerated(EnumType.ORDINAL)
-	private PaymentMovement paymentMovement;
+	private TransactionType transactionType;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	private Set<Payment> payments;
 
+
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	private Set<Item> items;
+	
 
 	@ManyToOne
 	@JoinColumn(name = "payment_cause", nullable = false)
@@ -129,14 +134,14 @@ public abstract class Transaction extends BaseEntity
 		this.value = value;
 	}
 
-	public PaymentMovement getPaymentMovement( )
+	public TransactionType getTransactionType( )
 	{
-		return paymentMovement;
+		return transactionType;
 	}
 
-	public void setPaymentMovement(PaymentMovement paymentMovement)
+	public void setTransactionType(TransactionType paymentMovement)
 	{
-		this.paymentMovement = paymentMovement;
+		this.transactionType = paymentMovement;
 	}
 
 	public Set<Payment> getPayments( )
@@ -167,6 +172,16 @@ public abstract class Transaction extends BaseEntity
 	public void setProject(Project project)
 	{
 		this.project = project;
+	}
+
+	public Set<Item> getItems( )
+	{
+		return items;
+	}
+
+	public void setItems(Set<Item> items)
+	{
+		this.items = items;
 	}
 	
 	

@@ -25,4 +25,25 @@ public class ConverterUtils
 		if (o != null) return Double.parseDouble(o.toString());
 		return null;
 	}
+	
+	/**
+	 * 
+	 * @param o
+	 * @return null in case of exception
+	 */
+	public static Double toDoubleWithOutException(Object o) 
+	{
+		if (o != null) 
+		{
+			try
+			{
+				return Double.parseDouble(o.toString());
+			}
+			catch(NumberFormatException e)
+			{
+				return null;
+			}
+		}
+		return null;
+	}
 }

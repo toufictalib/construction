@@ -1,6 +1,5 @@
 package desktopadmin.model.accounting;
 
-import com.itel.lib.commons.exceptions.NotFoundException;
 
 public class EnumType
 {
@@ -33,9 +32,9 @@ public class EnumType
 	}
 	
 
-	public enum PaymentMovement
+	public enum TransactionType
 	{
-		PURCHASE, PAYMENT;
+		PURCHASE, PAYMENT, STOCK_RECEIVED;
 	}
 
 	public enum Currency
@@ -93,4 +92,5 @@ public class EnumType
 	{
 		NONE,SUM,AVERAGE,CURRENCY;
 	}
+	
 }

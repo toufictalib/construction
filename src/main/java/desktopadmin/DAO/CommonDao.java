@@ -118,6 +118,23 @@ public class CommonDao extends EmptyDAO
 			return list;
 			
 		}
+		
+		public List<Map<String, Object>> getStock(Long productId,Long supplierId, Long projectId)
+		{
+			
+			
+			Query query = getSession().createSQLQuery(
+					"CALL get_stock (:p_product_id,:p_supplier_id,:p_project_id)")
+					.setParameter("p_product_id", productId)
+					.setParameter("p_supplier_id", supplierId)
+					.setParameter("p_project_id", projectId)
+					
+					;
+					
+					List<Map<String, Object>> list = toReportTableModel(query);
+			return list;
+			
+		}
 
 	@SuppressWarnings("unchecked")
 	private List<Map<String, Object>> toReportTableModel(Query query)

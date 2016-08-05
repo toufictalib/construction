@@ -38,5 +38,7 @@ public interface Crud extends Remote
 	List<Contract> getCustomerContracts(Long projectId) throws RemoteException;
 
 	ReportTableModel getProjectExpensesIncome(Long projectId) throws RemoteException;
+
+	ReportTableModel getStock(Long productId, Long supplierId, Long projectId) throws RemoteException;
 	
 }
