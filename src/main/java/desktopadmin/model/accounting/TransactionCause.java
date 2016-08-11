@@ -14,8 +14,8 @@ import javax.persistence.Table;
 import desktopadmin.model.accounting.EnumType.Payer;
 import desktopadmin.model.general.InfoEntity;
 
-@Entity
-@Table(name = "transaction_cause")
+/*@Entity
+@Table(name = "transaction_cause")*/
 public class TransactionCause extends InfoEntity
 {
 

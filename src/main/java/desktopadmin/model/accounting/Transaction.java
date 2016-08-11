@@ -32,10 +32,10 @@ public abstract class Transaction extends BaseEntity
 	private static final long serialVersionUID = 3938371883735098904L;
 
 	public final static double DOLLAR_CONVERTER = 1512;
-	@Column(name = "description")
+	@Column(name = "description", nullable = false)
 	private String descritpion;
 
-	@Column(name = "reference_id")
+	@Column(name = "reference_id", nullable = false)
 	private long referenceId;
 
 	@Column(name = "value", nullable = false)
@@ -53,9 +53,9 @@ public abstract class Transaction extends BaseEntity
 	private Set<Item> items;
 	
 
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn(name = "payment_cause", nullable = false)
-	private TransactionCause paymentCause;
+	private TransactionCause paymentCause;*/
 
 	@Column(name = "payer", nullable = false)
 	@Enumerated(EnumType.ORDINAL)
@@ -94,7 +94,7 @@ public abstract class Transaction extends BaseEntity
 
 
 
-	public TransactionCause getPaymentCause( )
+	/*public TransactionCause getPaymentCause( )
 	{
 		return paymentCause;
 	}
@@ -102,7 +102,7 @@ public abstract class Transaction extends BaseEntity
 	public void setPaymentCause(TransactionCause paymentCause)
 	{
 		this.paymentCause = paymentCause;
-	}
+	}*/
 
 	public Payer getPayer( )
 	{

@@ -39,6 +39,7 @@ public class DBStarter
 		return context;
 	}
 
+	@SuppressWarnings("unused")
 	public static void main(String[] args)
 	{
 		//DBStarter dbStarter= new DBStarter();

@@ -34,7 +34,15 @@ public class EnumType
 
 	public enum TransactionType
 	{
-		PURCHASE, PAYMENT, STOCK_RECEIVED;
+		PAYMENT_DOWN,
+		PAYMENT_RECEIPT,
+		PURCHASE_INVOICE,
+		PURCHASE_REAL_ESTATE,
+		PAYMENT_INVOICE,
+		
+		
+		STOCK_INIT,
+		STOCK_RECEIVED;
 	}
 
 	public enum Currency
