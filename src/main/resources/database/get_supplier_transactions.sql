@@ -8,17 +8,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_supplier_transactions`(IN p_cus
 BEGIN
   
   SELECT 
-  /*p.`name`,
-	p.`last_name` ,
-	p.`phone1`,
-	p.`email`,
-	ti.`name`,	
-	*/
 	t.`id`,
 	t.`description`,
-	IF (t.`payment_movement` = 0 , CONCAT(t.value," $") , "") AS "Purchase" ,
-	IF (t.`payment_movement` = 1 , CONCAT(t.value," $") , "") AS "Payment" ,
-	tc.`name` AS "Payment Cause",
+	CAST(IF (t.`payment_movement` = 2 , CONCAT(t.value) , NULL) AS DECIMAL(10,2))AS "Purchase" ,
+	CAST(IF (t.`payment_movement` = 4 , CONCAT(t.value) , NULL)AS DECIMAL(10,2)) AS "Payment" ,
 	`getPaymentMovementValue`(t.`payment_movement`) AS "Payment Movement"
 	
 FROM
@@ -27,11 +20,12 @@ FROM
     ON p.`id` = t.`reference_id` 
   LEFT JOIN title ti 
     ON ti.`id` = p.`title` 
-    LEFT JOIN `transaction_cause` tc ON t.`payment_cause` = tc.id
+    
 WHERE t.`payer` = 0
 AND t.`reference_id` = p_customer_id
   /*Customer*/
   AND t.project = p_project_id
+  AND t.`payment_movement` IN (2,4)
 	
   ;
     

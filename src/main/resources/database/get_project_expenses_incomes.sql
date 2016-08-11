@@ -30,14 +30,14 @@ DECLARE ss VARCHAR(2000) DEFAULT " ";
   CAST(IF (
     t.`payer` = 1,
     CONCAT(t.value),
-    ""
+    NULL
   )AS DECIMAL(10,2))AS "Income",
  CAST(IF (
     t.`payer` = 0,
     CONCAT(t.value),
-    ""
+    NULL
   ) AS DECIMAL(10,2) ) AS  "Depenses" ,
-  tc.`name` AS "Payment Cause",
+  
   `getPaymentMovementValue` (t.`payment_movement`) AS "Payment Movement" 
   
 FROM
@@ -46,10 +46,9 @@ TRANSACTION t
     ON p.`id` = t.`reference_id` 
   LEFT JOIN title ti 
     ON ti.`id` = p.`title` 
-  LEFT JOIN `transaction_cause` tc 
-    ON t.`payment_cause` = tc.id 
+  
     
-WHERE t.project =',p_project_id,'   AND t.payment_movement =1 
+WHERE t.project =',p_project_id,'    
  ',v_where,' limit ',p_start_count,',',p_end_count)
 ;
     

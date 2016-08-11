@@ -1,4 +1,16 @@
-SELECT 
+DELIMITER $$
+
+USE `construction`$$
+
+DROP PROCEDURE IF EXISTS `get_stock`$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_stock`(IN p_product_id BIGINT,IN p_supplier_id BIGINT,IN p_project_id BIGINT)
+BEGIN
+  DECLARE v_where VARCHAR(1000) DEFAULT "";
+  DECLARE sql_query VARCHAR(2000) DEFAULT " ";
+		
+SET sql_query=
+'SELECT 
   i.`id`,
   p.`name`,
  
@@ -15,4 +27,24 @@ FROM
     ON p.`id` = i.`product` 
     LEFT JOIN `transaction` t ON t.id = i.transaction 
     
-    WHERE 1=1 AND p.id =1 AND t.reference_id=3
+    WHERE  t.`project` =';
+    
+    SET sql_query = CONCAT(sql_query,p_project_id);		
+ 
+ IF(p_product_id <> -1) THEN
+	SET v_where=CONCAT(v_where," and p.id =", p_product_id);
+	END IF;
+	
+	IF(p_supplier_id <> -1) THEN
+	SET v_where=CONCAT(v_where," and t.reference_id=", p_supplier_id);
+	END IF;
+	
+ SET sql_query = CONCAT(sql_query,v_where);
+    SET @s =sql_query;
+	PREPARE stmt FROM 	@s;
+	EXECUTE stmt;
+    
+   INSERT INTO queries(VALUE,date_creation) VALUES(sql_query,NOW());
+    END$$
+
+DELIMITER ;
