@@ -9,6 +9,7 @@ import desktopadmin.action.bean.BlockBean;
 import desktopadmin.action.bean.ContractBean;
 import desktopadmin.action.bean.ReportTableModel;
 import desktopadmin.model.sold.Contract;
+import desktopadmin.utils.SearchBean;
 
 public interface Crud extends Remote
 {
@@ -29,16 +30,16 @@ public interface Crud extends Remote
 	ContractBean getSupplierContractBean(Long projectId) throws RemoteException;
 
 
-	ReportTableModel getCustomerTransaction(Long customerId, Long contractId)  throws RemoteException;
+	ReportTableModel getCustomerTransaction(SearchBean searchBean)  throws RemoteException;
 
-	ReportTableModel getSupplierTransaction(Long supplierId, Long projectId) throws RemoteException;
+	ReportTableModel getSupplierTransaction(SearchBean searchBean) throws RemoteException;
 
-	List<Contract> getCustomerContracts(Long projectId, Long customerId) throws RemoteException;
+	List<Contract> getCustomerContracts(SearchBean searchBean) throws RemoteException;
 
 	List<Contract> getCustomerContracts(Long projectId) throws RemoteException;
 
-	ReportTableModel getProjectExpensesIncome(Long projectId) throws RemoteException;
+	ReportTableModel getProjectExpensesIncome(SearchBean searchBean) throws RemoteException;
 
-	ReportTableModel getStock(Long productId, Long supplierId, Long projectId) throws RemoteException;
+	ReportTableModel getStock(SearchBean searchBean) throws RemoteException;
 	
 }

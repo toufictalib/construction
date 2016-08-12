@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import report.bean.CustomerContractReportBean;
 import desktopadmin.DAO.CommonDao;
 import desktopadmin.action.bean.BlockBean;
 import desktopadmin.action.bean.ContractBean;
@@ -31,6 +32,7 @@ import desktopadmin.model.person.Company;
 import desktopadmin.model.person.Customer;
 import desktopadmin.model.person.Supplier;
 import desktopadmin.model.sold.Contract;
+import desktopadmin.utils.SearchBean;
 
 @Service
 @Transactional
@@ -196,9 +198,9 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 	}
 	
 	@Override
-	public ReportTableModel getCustomerTransaction(Long customerId, Long contractId)
+	public ReportTableModel getCustomerTransaction(SearchBean searchBean)
 	{
-		List list = commonDao.getCustomerTransactions(customerId, contractId);
+		List list = commonDao.getCustomerTransactions(searchBean);
 		
 		
 		System.out.println();
@@ -211,9 +213,9 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 	
 	@SuppressWarnings("rawtypes")
 	@Override
-	public ReportTableModel getSupplierTransaction(Long supplierId, Long projectId)
+	public ReportTableModel getSupplierTransaction(SearchBean searchBean)
 	{
-		List list = commonDao.getSuppliersTransactions(supplierId, projectId);
+		List list = commonDao.getSuppliersTransactions(searchBean);
 		
 		
 		
@@ -223,9 +225,9 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 	}
 	
 	@Override
-	public List<Contract> getCustomerContracts(Long projectId, Long customerId)
+	public List<Contract> getCustomerContracts(SearchBean bean)
 	{
-		List<Contract> contracts =  commonDao.getCustomerContracts(projectId, customerId);
+		List<Contract> contracts =  commonDao.getCustomerContracts(bean);
 		
 		
 		return contracts;
@@ -245,15 +247,15 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 	}
 	
 	@Override
-	public ReportTableModel getProjectExpensesIncome(Long projectId)
+	public ReportTableModel getProjectExpensesIncome(SearchBean searchBean)
 	{
-		return ReportTableModel.create(commonDao.getProjectExpensesIncome(projectId));
+		return ReportTableModel.create(commonDao.getProjectExpensesIncome(searchBean));
 	}
 	
 	@Override
-	public ReportTableModel getStock(Long productId,Long supplierId,Long projectId)
+	public ReportTableModel getStock(SearchBean searchBean)
 	{
-		return ReportTableModel.create(commonDao.getStock(productId, supplierId,projectId));
+		return ReportTableModel.create(commonDao.getStock(searchBean));
 	}
 
 

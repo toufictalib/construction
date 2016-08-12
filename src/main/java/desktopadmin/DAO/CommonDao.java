@@ -1,17 +1,23 @@
 package desktopadmin.DAO;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.transform.BasicTransformerAdapter;
 import org.springframework.stereotype.Repository;
 
+import report.bean.CustomerContractReportBean;
+import report.bean.CustomerReportBean;
+import report.bean.ExpensesIconeReportBean;
+import report.bean.StockReportBean;
+import report.bean.SupplierReportBean;
 import desktopadmin.model.building.Block;
 import desktopadmin.model.sold.Contract;
+import desktopadmin.utils.ProcedureBuilder;
+import desktopadmin.utils.ReportUtils;
+import desktopadmin.utils.SearchBean;
 
 @Repository
 public class CommonDao extends EmptyDAO
@@ -54,44 +60,64 @@ public class CommonDao extends EmptyDAO
 		
 	}
 	
-		public List<Map<String, Object>> getCustomerTransactions(Long customerId,Long contractId)
+		public List<Map<String, Object>> getCustomerTransactions(SearchBean searchBean)
 		{
 			
 			
-			Query query = getSession().createSQLQuery(
-					"CALL get_customer_transactions (:p_customer_id,:p_contract_id)")
-					.setParameter("p_customer_id", customerId)
-					.setParameter("p_contract_id", contractId);
+			CustomerReportBean customerBean = (CustomerReportBean) searchBean.getHolder();
+			
+			Query query = ProcedureBuilder.edit().setName("get_customer_transactions")
+			.addParameter("p_customer_id", customerBean.getCustomerId())
+			.addParameter("p_contract_id", customerBean.getContractId())
+			.addSearchBeanParameter(searchBean)
+			.buildQuery(getSession());
+			
+		/*	Query query = getSession().createSQLQuery(
+					"CALL get_customer_transactions (:p_customer_id,:p_contract_id,"
+					+ ":p_from_date,:p_to_date,:p_start_count,:p_end_count)")
+					.setParameter("p_customer_id", customerBean.getCustomerId())
+					.setParameter("p_contract_id", customerBean.getContractId())
 					;
+			query = ReportUtils.addSearchBeanElements(query, searchBean);*/
 					
-					List<Map<String, Object>> list = toReportTableModel(query);
+					List<Map<String, Object>> list = ReportUtils.toReportTableModel(query);
 					return list;
 			
 		}
 	
-		public List<Map<String, Object>> getSuppliersTransactions(Long customerId,Long projectId)
+		public List<Map<String, Object>> getSuppliersTransactions(SearchBean searchBean)
 		{
 			
+			SupplierReportBean bean = (SupplierReportBean) searchBean.getHolder();
+			Query query = ProcedureBuilder.edit().setName("get_supplier_transactions")
+					.addParameter("p_supplier_id", bean.getSupplierId())
+					.addParameter("p_project_id", bean.getProjectId())
+					.addSearchBeanParameter(searchBean)
+					.buildQuery(getSession());
 			
-			Query query = getSession().createSQLQuery(
-					"CALL get_supplier_transactions (:p_customer_id,:p_project_id)")
-					.setParameter("p_customer_id", customerId)
-					.setParameter("p_project_id", projectId);
+		/*	Query query = getSession().createSQLQuery(
+					"CALL get_supplier_transactions (:p_supplier_id,:p_project_id,"
+					+ ":p_from_date,:p_to_date,:p_start_count,:p_end_count)")
+					.setParameter("p_supplier_id", bean.getSupplierId())
+					.setParameter("p_project_id", bean.getProjectId())
 					;
+			query = ReportUtils.addSearchBeanElements(query, searchBean);*/
 					
-					List<Map<String, Object>> list = toReportTableModel(query);
+					List<Map<String, Object>> list = ReportUtils.toReportTableModel(query);
 					return list;
 			
 		}
 	
 	@SuppressWarnings("unchecked")
-	public List<Contract> getCustomerContracts(Long projectId,Long CustomerId)
+	public List<Contract> getCustomerContracts(SearchBean searchBean)
 	{
+		
+		CustomerContractReportBean bean = (CustomerContractReportBean) searchBean.getHolder();
 		String sql = "SELECT * FROM `contract` c\r\n" + 
 				"LEFT JOIN real_estate re ON re.`id` = c.`real_estate`\r\n" + 
 				"LEFT JOIN `block` b ON re.`block` = b.`id`\r\n" + 
-				"WHERE c.`customer` = "+CustomerId+" and "
-				+"b.project_id="+projectId;
+				"WHERE c.`customer` = "+bean.getCustomerId()+" and "
+				+"b.project_id="+bean.getProjectId();
 		
 		
 		Query query = getSession()
@@ -101,68 +127,55 @@ public class CommonDao extends EmptyDAO
 		
 	}
 	
-		public List<Map<String, Object>> getProjectExpensesIncome(Long projectId)
+		public List<Map<String, Object>> getProjectExpensesIncome(SearchBean searchBean)
 		{
 			
+			ExpensesIconeReportBean bean = (ExpensesIconeReportBean) searchBean.getHolder();
 			
-			Query query = getSession().createSQLQuery(
+			Query query = ProcedureBuilder.edit().setName("get_project_expenses_incomes")
+					.addParameter("p_project_id", bean.getProjectId())
+					.addSearchBeanParameter(searchBean)
+					.buildQuery(getSession());
+			
+			/*Query query = getSession().createSQLQuery(
 					"CALL get_project_expenses_incomes (:p_project_id,:p_start_date,:p_end_date,:p_start_count,:p:p_end_count)")
-					.setParameter("p_project_id", projectId)
-					.setParameter("p_start_date", null)
-					.setParameter("p_end_date", null)
-					.setParameter("p_start_count", 0)
-					.setParameter("p:p_end_count", 1000);
-					;
+					.setParameter("p_project_id", bean.getProjectId())
 					
-					List<Map<String, Object>> list = toReportTableModel(query);
+					;
+			
+			query = ReportUtils.addSearchBeanElements(query, searchBean);*/
+					
+					List<Map<String, Object>> list = ReportUtils.toReportTableModel(query);
 			return list;
 			
 		}
 		
-		public List<Map<String, Object>> getStock(Long productId,Long supplierId, Long projectId)
+		public List<Map<String, Object>> getStock(SearchBean searchBean)
 		{
+			StockReportBean bean = (StockReportBean) searchBean.getHolder();
 			
+			Query query = ProcedureBuilder.edit().setName("get_stock")
+					.addParameter("p_product_id", bean.getProductId())
+					.addParameter("p_supplier_id", bean.getSupplierId())
+					.addParameter("p_project_id", bean.getProjectId())
+					.addSearchBeanParameter(searchBean)
+					.buildQuery(getSession());
 			
-			Query query = getSession().createSQLQuery(
-					"CALL get_stock (:p_product_id,:p_supplier_id,:p_project_id)")
-					.setParameter("p_product_id", productId)
-					.setParameter("p_supplier_id", supplierId)
-					.setParameter("p_project_id", projectId)
-					
+			/*Query query = getSession().createSQLQuery(
+					"CALL get_stock (:p_product_id,:p_supplier_id,:p_project_id,"
+					+ ":p_from_date,:p_to_date,:p_start_count,:p_end_count)")
+					.setParameter("p_product_id", bean.getProductId())
+					.setParameter("p_supplier_id", bean.getSupplierId())
+					.setParameter("p_project_id", bean.getProjectId())
 					;
+			
+					query = ReportUtils.addSearchBeanElements(query, searchBean);*/
 					
-					List<Map<String, Object>> list = toReportTableModel(query);
+					List<Map<String, Object>> list = ReportUtils.toReportTableModel(query);
 			return list;
 			
 		}
 
-	@SuppressWarnings("unchecked")
-	private List<Map<String, Object>> toReportTableModel(Query query)
-	{
-		query.setResultTransformer(new BasicTransformerAdapter()
-		{
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -710254399413875754L;
-
-			@Override
-			public Object transformTuple(Object[] tuple, String[] aliases)
-			{
-				Map<String, Object> map = new LinkedHashMap<>();
-				for(int i=0;i<tuple.length;i++)
-				{
-					map.put(aliases[i], tuple[i]);
-				}
-				
-				return map;
-			}
-		});
-		
-		
-		List<Map<String, Object>> list = query.list();
-		return list;
-	}
 	
 	
 }
