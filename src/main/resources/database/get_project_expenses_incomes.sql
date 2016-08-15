@@ -8,7 +8,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_expenses_incomes`(IN p_
 BEGIN
   
   DECLARE v_where VARCHAR(2000) DEFAULT " ";
-DECLARE ss VARCHAR(2000) DEFAULT " ";
   IF (p_from_date <> -1) THEN
 		SET v_where = CONCAT(v_where,' and t.date_creation >=',"'",p_from_date,"'");
 	END IF;
@@ -18,7 +17,7 @@ DECLARE ss VARCHAR(2000) DEFAULT " ";
 	END IF;
 	
 	
-  SET ss  = CONCAT('
+  SET v_where  = CONCAT('
   SELECT 
    t.`id` AS "Transaction #",
  ti.`name` AS "Title",
@@ -38,7 +37,8 @@ DECLARE ss VARCHAR(2000) DEFAULT " ";
     NULL
   ) AS DECIMAL(10,2) ) AS  "Depenses" ,
   
-  `getPaymentMovementValue` (t.`payment_movement`) AS "Payment Movement" 
+  `getPaymentMovementValue` (t.`payment_movement`) AS "Payment Movement",
+  t.date_creation as "Creation Date"
   
 FROM
 TRANSACTION t 
@@ -49,12 +49,12 @@ TRANSACTION t
   
     
 WHERE t.project =',p_project_id,'    
- ',v_where,' limit ',p_start_count,',',p_end_count)
+ ',v_where,' order by t.date_creation desc limit ',p_start_count,',',p_end_count)
 ;
     
 	
-	SET @s =ss;
-	PREPARE stmt FROM 	@s;
+	SET @s =v_where;
+	PREPARE stmt FROM @s;
 	EXECUTE stmt;
 	 INSERT INTO queries(VALUE,date_creation) VALUES(v_where,NOW());
 	
