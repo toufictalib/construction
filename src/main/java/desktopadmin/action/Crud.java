@@ -41,5 +41,7 @@ public interface Crud extends Remote
 	ReportTableModel getProjectExpensesIncome(SearchBean searchBean) throws RemoteException;
 
 	ReportTableModel getStock(SearchBean searchBean) throws RemoteException;
+
+	ReportTableModel getFundersTransaction(SearchBean searchBean)throws RemoteException;
 	
 }

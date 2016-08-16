@@ -15,8 +15,8 @@ import java.util.Date;
  */
 public class DateUtil {
 
-	public static final String SHORT_SQL_DATE_FORMAT = "'YYYY-MM-DD"; 
-	public static final String LONG_SQL_DATE_FORMAT = "'YYYY-MM-DD HH:MM:SS"; 
+	public static final String SHORT_SQL_DATE_FORMAT = "yyyy-MM-dd"; 
+	public static final String LONG_SQL_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"; 
 	
 	public static final SimpleDateFormat SHORT_FORMAT = new SimpleDateFormat(SHORT_SQL_DATE_FORMAT);
 	
@@ -162,7 +162,7 @@ public class DateUtil {
         return cal.getTime();
     }
     
-    public static synchronized String formatShortSqlDate(Date date)
+    public static String formatShortSqlDate(Date date)
     {
     	return SHORT_FORMAT.format(date);
     }

@@ -1,23 +1,17 @@
 package desktopadmin.action;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import report.bean.CustomerContractReportBean;
 import desktopadmin.DAO.CommonDao;
 import desktopadmin.action.bean.BlockBean;
 import desktopadmin.action.bean.ContractBean;
@@ -26,10 +20,9 @@ import desktopadmin.action.bean.Entry;
 import desktopadmin.action.bean.ReportTableModel;
 import desktopadmin.model.building.Block;
 import desktopadmin.model.building.Project;
-import desktopadmin.model.building.RealEstate;
-import desktopadmin.model.general.BaseEntity;
 import desktopadmin.model.person.Company;
 import desktopadmin.model.person.Customer;
+import desktopadmin.model.person.Funder;
 import desktopadmin.model.person.Supplier;
 import desktopadmin.model.sold.Contract;
 import desktopadmin.utils.SearchBean;
@@ -180,9 +173,13 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 		List<Company> companies= list(Company.class);
 		List<Entry> companiesEntries = companies.stream().map(e->new Entry(e.getId(),e.getName())).collect(Collectors.toList());
 		
+		List<Funder> funders= list(Funder.class);
+		List<Entry> funderEntries = funders.stream().map(e->new Entry(e.getId(),e.getName())).collect(Collectors.toList());
+		
 		ContractBean contractBean = new ContractBean();
 		contractBean.setBlocks(blocksByProject);
 		contractBean.setCompanies(companiesEntries);
+		contractBean.setFunders(funderEntries);
 		contractBean.setSuppliers(supplierEntries);
 		
 		return contractBean;
@@ -216,6 +213,21 @@ public class CrudImplementation extends UnicastRemoteObject implements Crud
 	public ReportTableModel getSupplierTransaction(SearchBean searchBean)
 	{
 		List list = commonDao.getSuppliersTransactions(searchBean);
+		
+		
+		
+		ReportTableModel model = ReportTableModel.create(list);
+		
+		return model;
+	}
+	
+	@SuppressWarnings({
+	"rawtypes", "unchecked"
+	})
+	@Override
+	public ReportTableModel getFundersTransaction(SearchBean searchBean)
+	{
+		List list = commonDao.getFundersTransactions(searchBean);
 		
 		
 		

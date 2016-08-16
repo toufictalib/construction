@@ -107,6 +107,28 @@ public class CommonDao extends EmptyDAO
 					return list;
 			
 		}
+		
+		public List<Map<String, Object>> getFundersTransactions(SearchBean searchBean)
+		{
+			
+			SupplierReportBean bean = (SupplierReportBean) searchBean.getHolder();
+			Query query = ProcedureBuilder.edit().setName("get_funder_transactions")
+					.addParameter("p_supplier_id", bean.getSupplierId())
+					.addSearchBeanParameter(searchBean)
+					.buildQuery(getSession());
+			
+		/*	Query query = getSession().createSQLQuery(
+					"CALL get_supplier_transactions (:p_supplier_id,:p_project_id,"
+					+ ":p_from_date,:p_to_date,:p_start_count,:p_end_count)")
+					.setParameter("p_supplier_id", bean.getSupplierId())
+					.setParameter("p_project_id", bean.getProjectId())
+					;
+			query = ReportUtils.addSearchBeanElements(query, searchBean);*/
+					
+					List<Map<String, Object>> list = ReportUtils.toReportTableModel(query);
+					return list;
+			
+		}
 	
 	@SuppressWarnings("unchecked")
 	public List<Contract> getCustomerContracts(SearchBean searchBean)

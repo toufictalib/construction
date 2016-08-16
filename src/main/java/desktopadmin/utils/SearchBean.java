@@ -29,13 +29,19 @@ public class SearchBean implements Serializable
 
 	public SearchBean setFromDate(String fromDate)
 	{
-		this.fromDate = fromDate+" 00:00:00";
+		if ( !fromDate.equals("-1"))
+		{
+			this.fromDate = fromDate + " 00:00:00";
+		}
 		return this;
 	}
 
 	public SearchBean setEndDate(String endDate)
 	{
-		this.endDate = endDate+" 23:59:59";
+		if ( !endDate.equals("-1"))
+		{
+			this.endDate = endDate + " 23:59:59";
+		}
 		return this;
 	}
 

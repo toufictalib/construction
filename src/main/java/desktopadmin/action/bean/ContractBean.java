@@ -17,6 +17,7 @@ public class ContractBean implements Serializable
 	private List<Entry> customers;
 	private List<Entry> suppliers;
 	private List<Entry> companies;
+	private List<Entry> funders;
 
 	private List<Block> blocks;
 
@@ -75,6 +76,17 @@ public class ContractBean implements Serializable
 	public void setCompanies(List<Entry> companies)
 	{
 		this.companies = companies;
+	}
+
+	
+	public List<Entry> getFunders( )
+	{
+		return funders;
+	}
+
+	public void setFunders(List<Entry> funders)
+	{
+		this.funders = funders;
 	}
 
 	public List<Transaction> getTransactions( )
